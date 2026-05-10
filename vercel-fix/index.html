@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini 助手</title>
+</head>
+<body>
+    <h2>Gemini 2.5 Flash 在线版</h2>
+    <input type="text" id="userInput" placeholder="随便问..." style="width:300px;">
+    <button onclick="send()">发送</button>
+    <hr>
+    <strong>回复：</strong>
+    <div id="output"></div>
+
+    <script>
+        async function send() {
+            const msg = document.getElementById('userInput').value;
+            document.getElementById('output').innerText = "思考中...";
+            try {
+                const res = await fetch('/api/gemini', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg })
+                });
+                const data = await res.json();
+                document.getElementById('output').innerText = data.reply || data.error;
+            } catch (e) {
+                document.getElementById('output').innerText = '出错了，请确认部署已完成。';
+            }
+        }
+    </script>
+</body>
+</html>
